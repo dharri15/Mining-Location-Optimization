@@ -1,0 +1,43 @@
+import pandas as pd
+import numpy as np
+import random
+from faker import Faker
+
+# Initialize the Faker instance
+fake = Faker()
+
+# Define a list of small towns in the US with populations between 10,000 and 50,000
+small_towns = [
+    'Auburn, AL', 'Burlington, VT', 'Claremont, NH', 'Dover, DE', 'Elkhart, IN',
+    'Gainesville, FL', 'Harrisonburg, VA', 'Haverhill, MA', 'Hickory, NC', 'Jackson, TN',
+    'Jamestown, NY', 'LaGrange, GA', 'Lebanon, NH', 'Macon, GA', 'Middletown, OH',
+    'Mount Vernon, WA', 'Olean, NY', 'Portsmouth, NH', 'Redwood City, CA', 'Sandusky, OH',
+    'Sarasota, FL', 'Seymour, IN', 'Sheridan, WY', 'Sierra Vista, AZ', 'Tifton, GA',
+    'Trenton, NJ', 'Vero Beach, FL', 'Waco, TX', 'Wilmington, OH', 'Zanesville, OH'
+]
+
+def generate_sites_data(num_sites):
+    sites = []
+    for _ in range(num_sites):
+        site = {
+            'site_id': str(fake.uuid4()),
+            'location': random.choice(small_towns),  # Use small town names
+            'lease_cost': round(np.random.uniform(50000, 500000), 2),  # Lease cost between $50,000 and $500,000
+            'ongoing_energy_cost': round(np.random.uniform(10000, 200000), 2),  # Ongoing energy cost between $10,000 and $200,000
+            'setup_labor_cost': round(np.random.uniform(20000, 100000), 2),  # Setup labor cost between $20,000 and $100,000
+            'ongoing_labor_cost': round(np.random.uniform(30000, 150000), 2),  # Ongoing labor cost between $30,000 and $150,000
+            'revenue': round(np.random.uniform(500000, 5000000), 2),  # Revenue between $500,000 and $5,000,000
+            'infrastructure_quality': np.random.randint(1, 11),  # Quality score from 1 to 10
+            'tax_rate': round(np.random.uniform(0.10, 0.35), 2)  # Tax rate between 10% and 35%
+        }
+        sites.append(site)
+    return pd.DataFrame(sites)
+
+# Generate data
+num_sites = 50
+sites_df = generate_sites_data(num_sites)
+
+# Export raw data to CSV
+sites_df.to_csv('sites_data.csv', index=False)
+
+print("Synthetic data exported to 'sites_data.csv'")
